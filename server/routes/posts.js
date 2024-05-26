@@ -9,7 +9,7 @@ import {
   likePost,
   deletePost,
   commentPost,
-  sortPostsByDate,
+  getPostsByDate,
 } from "../controllers/posts.js";
 
 const router = express.Router();
@@ -24,6 +24,6 @@ router.patch("/:id", auth, updatePost);
 router.delete("/:id", auth, deletePost);
 router.patch("/:id/likePost", auth, likePost);
 router.post("/:id/commentPost", auth, commentPost);
-router.get("/sort", sortPostsByDate)
+router.get("/sort", getPostsByDate)
 
 export default router;

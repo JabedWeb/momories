@@ -13,7 +13,7 @@ import {
   InputLabel,
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { getPostsBySearch, sortPostsByDate } from "../../actions/posts";
+import { getPostsByDate, getPostsBySearch} from "../../actions/posts";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 import Pagination from "../Pagination/Paginate";
@@ -70,7 +70,7 @@ const Home = () => {
 
   const handleSortChange = (e) => {
     setSort(e.target.value);
-    dispatch(sortPostsByDate({ sort: e.target.value }));
+    dispatch(getPostsByDate({ sort: e.target.value }));
     history.push(`/posts/sort?sort=${e.target.value}`);
   };
 

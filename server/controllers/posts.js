@@ -52,16 +52,17 @@ export const getPostsBySearch = async (req, res) => {
   }
 };
 
-export const sortPostsByDate = async (req, res) => {
+export const getPostsByDate = async (req, res) => {
   
+  const { sort } = req.query;
+
   try {
-    const { sort } = req.query;
     const sortOrder = sort === 'asc' ? 1 : -1;
     const posts = await PostMessage.find().sort({ createdAt: sortOrder });
-
     res.status(200).json(posts);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    console.error(`Error sorting posts: ${error.message}`);
+    res.status(404).json({ message: 'Error fetching posts' });
   }
 };
 
@@ -71,26 +72,26 @@ export const createPost = async (req, res) => {
   const newPostMessage = new PostMessage({
     ...post,
     creator: req.userId,
-    createdAt: new Date().toISOString(),
+    createdAt: post.createdAt || new Date().toISOString(),  // Ensure createdAt is set
   });
 
   try {
     await newPostMessage.save();
-
+   // console.log(`Post created: ${newPostMessage}`);
     res.status(201).json(newPostMessage);
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    console.error(`Error creating post: ${error.message}`);
+    res.status(409).json({ message: 'Error creating post' });
   }
 };
 
 export const updatePost = async (req, res) => {
   const { id } = req.params;
-  const { title, message, creator, selectedFile, tags } = req.body;
+  const { title, message, creator, tags, selectedFile, createdAt } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`No post with id: ${id}`);
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
 
-  const updatedPost = { creator, title, message, tags, selectedFile, _id: id };
+  const updatedPost = { title, message, creator, tags, selectedFile, createdAt, _id: id };
 
   await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
 

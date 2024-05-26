@@ -12,6 +12,7 @@ const Form = ({ currentId, setCurrentId }) => {
     message: "",
     tags: "",
     selectedFile: "",
+    createdAt: formatDate(new Date()),  // Default to the current date and time in the correct format
   });
   const post = useSelector((state) =>
     currentId
@@ -22,15 +23,20 @@ const Form = ({ currentId, setCurrentId }) => {
   const history = useHistory();
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("profile"));
-  console.log(user);
 
   useEffect(() => {
-    if (post) setPostData(post);
+    if (post) {
+      setPostData({
+        ...post,
+        tags: post.tags.join(", "),
+        createdAt: formatDate(post.createdAt),  // Format date for input
+      });
+    }
   }, [post]);
 
   const clear = () => {
     setCurrentId(0);
-    setPostData({ title: "", message: "", tags: "", selectedFile: "" });
+    setPostData({ title: "", message: "", tags: "", selectedFile: "", createdAt: formatDate(new Date()) });
   };
 
   const handleSubmit = async (e) => {
@@ -45,7 +51,6 @@ const Form = ({ currentId, setCurrentId }) => {
       );
       clear();
     }
-    console.log(postData);
   };
 
   if (!user?.result?.name) {
@@ -92,12 +97,24 @@ const Form = ({ currentId, setCurrentId }) => {
         <TextField
           name="tags"
           variant="outlined"
-          label="Tags (coma separated)"
+          label="Tags (comma separated)"
           fullWidth
           value={postData.tags}
           onChange={(e) =>
             setPostData({ ...postData, tags: e.target.value.split(",") })
           }
+        />
+        <TextField
+          name="createdAt"
+          variant="outlined"
+          label="Date and Time"
+          type="datetime-local"
+          fullWidth
+          value={postData.createdAt}
+          onChange={(e) => setPostData({ ...postData, createdAt: e.target.value })}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
         <div className={classes.fileInput}>
           <FileBase
@@ -130,6 +147,17 @@ const Form = ({ currentId, setCurrentId }) => {
       </form>
     </Paper>
   );
+};
+
+const formatDate = (date) => {
+  const d = new Date(date);
+  const pad = (num) => (num < 10 ? `0${num}` : num);
+  const year = d.getFullYear();
+  const month = pad(d.getMonth() + 1);
+  const day = pad(d.getDate());
+  const hours = pad(d.getHours());
+  const minutes = pad(d.getMinutes());
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
 export default Form;

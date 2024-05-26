@@ -50,9 +50,9 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
 };
 
 
-export const sortPostsByDate = (sortParams) => async (dispatch) => {
+export const getPostsByDate = (sort) => async (dispatch) => {
   try {
-    const { data } = await api.sortPostsByDate(sortParams);
+    const { data } = await api.sortPostsByDate(sort);
     dispatch({ type: FETCH_SORTED_POSTS, payload: data });
   } catch (error) {
     console.error('Error sorting posts by date:', error);
@@ -70,11 +70,13 @@ export const createPost = (post, history) => async (dispatch) => {
 
 export const updatePost = (id, post) => async (dispatch) => {
   try {
+    dispatch({ type: 'START_LOADING' });
     const { data } = await api.updatePost(id, post);
-
-    dispatch({ type: UPDATE, payload: data });
+    dispatch({ type: 'UPDATE', payload: data });
+    dispatch(getPosts()); // Fetch posts after update
+    dispatch({ type: 'END_LOADING' });
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 
@@ -102,7 +104,7 @@ export const commentPost = (comment, id) => async (dispatch) => {
 
 export const deletePost = (id, history) => async (dispatch) => {
   try {
-    await await api.deletePost(id);
+    await api.deletePost(id);
     history.push("/");
     dispatch({ type: DELETE, payload: id });
   } catch (error) {
