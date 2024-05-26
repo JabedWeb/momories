@@ -23,6 +23,10 @@ export const fetchPostsBySearch = (searchQuery) =>
       searchQuery.tags
     }`
   );
+
+  export const sortPostsByDate = (sortParams) => {
+    API.get(`/posts/sort?sort=${sortParams.sort}`);
+  };
 export const createPost = (newPost) => API.post("/posts", newPost);
 export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 export const commentPost = (comment, id) =>

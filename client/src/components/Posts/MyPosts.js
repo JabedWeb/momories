@@ -5,19 +5,17 @@ import { useSelector } from "react-redux";
 import Post from "./Post/Post";
 import useStyles from "./styles";
 
-const Posts = ({ setCurrentId }) => {
+const MyPosts = ({ setCurrentId }) => {
   const { posts, isLoading } = useSelector((state) => state.posts);
   const classes = useStyles();
 
   const user = JSON.parse(localStorage.getItem("profile"));
-  const userPosts = posts.filter((post) => post.email === user?.result?.email);
+  const userPosts = posts.filter((post) => post.name === user?.result?.name);
 
   console.log(posts);
-  //console.log(userPosts);
+  console.log(userPosts);
 
-  if(!user && !isLoading) return "Please Sign In to create your own memories and like other's memories.";
-
-  if (!userPosts.length && !isLoading) return "No posts,create one now!";
+  if (!userPosts.length && !isLoading) return <h3>No posts yet,create new one now</h3>;
 
   return isLoading ? (
     <CircularProgress />
@@ -37,4 +35,4 @@ const Posts = ({ setCurrentId }) => {
   );
 };
 
-export default Posts;
+export default MyPosts;

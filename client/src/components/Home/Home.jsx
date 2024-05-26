@@ -7,9 +7,13 @@ import {
   AppBar,
   TextField,
   Button,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { getPostsBySearch } from "../../actions/posts";
+import { getPostsBySearch, sortPostsByDate } from "../../actions/posts";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 import Pagination from "../Pagination/Paginate";
@@ -23,6 +27,7 @@ function useQuery() {
 
 const Home = () => {
   const [currentId, setCurrentId] = useState(0);
+  const [sort, setSort] = useState('desc');
   const dispatch = useDispatch();
   const classes = useStyles();
   const query = useQuery();
@@ -33,18 +38,20 @@ const Home = () => {
   const [tags, setTags] = useState([]);
 
   const searchPost = () => {
-    if (search.trim() !== "" || tags.length > 0) {
-      if (search.trim() || tags) {
-        dispatch(getPostsBySearch({ search, tags: tags.join(",") }));
-        history.push(
-          `/posts/search?searchQuery=${search || "none"}&tags=${tags.join(",")}`
-        );
-      } else {
-        history.push("/");
-      }
-    } else {
-      history.push("/");
-    }
+    const searchParams = {
+      search: search.trim() || "none",
+      tags: tags.length ? tags.join(",") : "",
+      sort,
+    };
+
+    if (searchParams.search === "none" && !searchParams.tags) return;
+
+    console.log(searchParams);
+
+    dispatch(getPostsBySearch(searchParams));
+    history.push(
+      `/posts/search?searchQuery=${searchParams.search}&tags=${searchParams.tags}`
+    );
   };
 
   const handleKeyPress = (e) => {
@@ -61,6 +68,12 @@ const Home = () => {
     setTags(tags.filter((tag) => tag !== deleteTag));
   };
 
+  const handleSortChange = (e) => {
+    setSort(e.target.value);
+    dispatch(sortPostsByDate({ sort: e.target.value }));
+    history.push(`/posts/sort?sort=${e.target.value}`);
+  };
+
   return (
     <Grow in>
       <Container maxWidth="xl">
@@ -74,6 +87,19 @@ const Home = () => {
             <Posts setCurrentId={setCurrentId} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <InputLabel id="sort-label">Sort By Date</InputLabel>
+              <Select
+                labelId="sort-label"
+                id="sort"
+                value={sort}
+                onChange={handleSortChange}
+                label="Sort By Date"
+              >
+                <MenuItem value="desc">Descending</MenuItem>
+                <MenuItem value="asc">Ascending</MenuItem>
+              </Select>
+            </FormControl>
             <AppBar
               className={classes.appBarSearch}
               position="static"
@@ -107,7 +133,7 @@ const Home = () => {
             </AppBar>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
             {!searchQuery && !tags.length && (
-              <Paper elevation={6} className={classes.pagination}>
+              <Paper elevation={8} className={classes.pagination}>
                 <Pagination page={page} />
               </Paper>
             )}

@@ -9,6 +9,7 @@ import {
   END_LOADING,
   FETCH_POST,
   COMMENTS,
+  FETCH_SORTED_POSTS,
 } from "../constants/actionTypes";
 import * as api from "../api/index.js";
 
@@ -48,6 +49,15 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
   }
 };
 
+
+export const sortPostsByDate = (sortParams) => async (dispatch) => {
+  try {
+    const { data } = await api.sortPostsByDate(sortParams);
+    dispatch({ type: FETCH_SORTED_POSTS, payload: data });
+  } catch (error) {
+    console.error('Error sorting posts by date:', error);
+  }
+};
 export const createPost = (post, history) => async (dispatch) => {
   try {
     const { data } = await api.createPost(post);

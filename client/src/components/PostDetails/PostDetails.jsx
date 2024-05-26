@@ -4,6 +4,7 @@ import {
   Typography,
   CircularProgress,
   Divider,
+  Grid,
 } from "@material-ui/core/";
 import moment from "moment";
 import { Link, useParams, useHistory } from "react-router-dom";
@@ -11,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./styles";
 import { getPost, getPostsBySearch } from "../../actions/posts";
 import CommentSection from "./CommentSection";
+import Post from "../Posts/Post/Post";
 
 const PostDetails = () => {
   const classes = useStyles();
@@ -22,7 +24,7 @@ const PostDetails = () => {
 
   useEffect(() => {
     dispatch(getPost(id));
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (post) {
@@ -30,7 +32,7 @@ const PostDetails = () => {
         getPostsBySearch({ search: "none", tags: post?.tags.join(",") })
       );
     }
-  }, [post]);
+  }, [post, dispatch]);
 
   if (!post) return <Typography align="center">No post found</Typography>;
 
@@ -44,7 +46,10 @@ const PostDetails = () => {
 
   const openPost = (_id) => history.push(`/posts/${_id}`);
 
-  const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
+  // Filter posts based on ID
+ // const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
+  // Filter posts based on tags
+  const recommendedPosts = posts.filter(({ _id }) => _id !== post._id && post.tags.every((tag) => post.tags.includes(tag)));
 
   return (
     <Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
@@ -85,15 +90,12 @@ const PostDetails = () => {
             {moment(post.createdAt).fromNow()}
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
-          <Typography variant="body1">
-            <strong>Realtime Chat - coming soon!</strong>
-          </Typography>
           <Divider style={{ margin: "20px 0" }} />
           <CommentSection post={post} />
           <Divider style={{ margin: "20px 0" }} />
         </div>
         <div className={classes.imageSection}>
-          <img
+          <img style={{width:"800px"}}
             className={classes.media}
             src={
               post.selectedFile ||
@@ -103,36 +105,20 @@ const PostDetails = () => {
           />
         </div>
       </div>
-      {!!recommendedPosts.length && (
+      {recommendedPosts.length > 0 && (
         <div className={classes.section}>
           <Typography gutterBottom variant="h5">
             You might also like:
           </Typography>
           <Divider />
           <div className={classes.recommendedPosts}>
-            {recommendedPosts.map(
-              ({ title, name, message, likes, selectedFile, _id }) => (
-                <div
-                  style={{ margin: "20px", cursor: "pointer" }}
-                  onClick={() => openPost(_id)}
-                  key={_id}
-                >
-                  <Typography gutterBottom variant="h6">
-                    {title}
-                  </Typography>
-                  <Typography gutterBottom variant="subtitle2">
-                    {name}
-                  </Typography>
-                  {/* <Typography gutterBottom variant="subtitle2">
-                    {message}
-                  </Typography> */}
-                  <Typography gutterBottom variant="subtitle1">
-                    Likes: {likes.length}
-                  </Typography>
-                  <img src={selectedFile} width="200px" />
-                </div>
-              )
-            )}
+            <Grid container alignItems="stretch" spacing={3}>
+              {recommendedPosts.map((recommendedPost) => (
+                <Grid key={recommendedPost._id} item xs={12} sm={12} md={6} lg={3}>
+                  <Post post={recommendedPost} setCurrentId={recommendedPost._id} />
+                </Grid>
+              ))}
+            </Grid>
           </div>
         </div>
       )}

@@ -20,7 +20,7 @@ export const getPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   try {
     const { page } = req.query;
-    const LIMIT = 4;
+    const LIMIT = 8;
     // getting the starting index of every page
     const startIndex = (Number(page) - 1) * LIMIT;
     const total = await PostMessage.countDocuments({});
@@ -47,6 +47,19 @@ export const getPostsBySearch = async (req, res) => {
       $or: [{ title }, { tags: { $in: tags.split(",") } }],
     });
     res.json(posts);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const sortPostsByDate = async (req, res) => {
+  
+  try {
+    const { sort } = req.query;
+    const sortOrder = sort === 'asc' ? 1 : -1;
+    const posts = await PostMessage.find().sort({ createdAt: sortOrder });
+
+    res.status(200).json(posts);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

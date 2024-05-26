@@ -6,6 +6,7 @@ import Home from "./components/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
 import Auth from "./components/Auth/Auth";
 import PostDetails from "./components/PostDetails/PostDetails";
+import MyPosts from "./components/Posts/MyPosts";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -16,6 +17,7 @@ const App = () => {
         <Navbar />
         <Switch>
           <Route path="/" exact component={() => <Redirect to="/posts" />} />
+          <Route path="/myposts" exact component={MyPosts} />
           <Route path="/posts" exact component={Home} />
           <Route path="/posts/search" exact component={Home} />
           <Route path="/posts/:id" component={PostDetails} />

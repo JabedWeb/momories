@@ -22,6 +22,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const history = useHistory();
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("profile"));
+  console.log(user);
 
   useEffect(() => {
     if (post) setPostData(post);
@@ -36,14 +37,15 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
 
     if (currentId === 0) {
-      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      dispatch(createPost({ ...postData, name: user?.result?.name , email: user?.result?.email  }, history));
       clear();
     } else {
       dispatch(
-        updatePost(currentId, { ...postData, name: user?.result?.name })
+        updatePost(currentId, { ...postData, name: user?.result?.name, email :user?.result?.email })
       );
       clear();
     }
+    console.log(postData);
   };
 
   if (!user?.result?.name) {

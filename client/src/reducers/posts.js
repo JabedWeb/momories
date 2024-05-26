@@ -9,8 +9,11 @@ import {
   END_LOADING,
   FETCH_POST,
   COMMENTS,
+  FETCH_SORTED_POSTS,
+
 } from "../constants/actionTypes";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (state = { isLoading: true, posts: [] }, action) => {
   switch (action.type) {
     case START_LOADING:
@@ -28,6 +31,8 @@ export default (state = { isLoading: true, posts: [] }, action) => {
       };
     case FETCH_POSTS_BY_SEARCH:
       return { ...state, posts: action.payload };
+    case FETCH_SORTED_POSTS:
+      return { ...state, posts: action.payload };  
     case LIKE:
       return {
         ...state,
