@@ -27,7 +27,7 @@ function useQuery() {
 
 const Home = () => {
   const [currentId, setCurrentId] = useState(0);
-  const [sort, setSort] = useState('desc');
+  const [sort, setSort] = useState('asc');
   const dispatch = useDispatch();
   const classes = useStyles();
   const query = useQuery();
@@ -41,6 +41,7 @@ const Home = () => {
     const searchParams = {
       search: search.trim() || "none",
       tags: tags.length ? tags.join(",") : "",
+      sort,
     };
 
    // if (searchParams.search === "none" && !searchParams.tags) return;
@@ -49,7 +50,7 @@ const Home = () => {
 
     dispatch(getPostsBySearch(searchParams));
     history.push(
-      `/posts/search?searchQuery=${searchParams.search}&tags=${searchParams.tags}`
+      `/posts/search?searchQuery=${searchParams.search}&tags=${searchParams.tags}&sort=${searchParams.sort}`
     );
   };
 
@@ -67,11 +68,12 @@ const Home = () => {
     setTags(tags.filter((tag) => tag !== deleteTag));
   };
 
-  const handleSortChange = (e) => {
-    setSort(e.target.value);
-    dispatch(getPostsByDate({ sort: e.target.value }));
-    history.push(`/posts/sort?sort=${e.target.value}`);
-  };
+  // const handleSortChange = (e) => {
+  //   setSort(e.target.value);
+  //   console.log(e.target.value,"sort");
+  //   dispatch(getPostsByDate({ sort: e.target.value }));
+  //   history.push(`/posts/sort?sort=${e.target.value}`);
+  // };
 
   return (
     <Grow in>
@@ -86,7 +88,7 @@ const Home = () => {
             <Posts setCurrentId={setCurrentId} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl style={{display:"none"}} variant="outlined" className={classes.formControl}>
+            {/* <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel id="sort-label">Sort By Date</InputLabel>
               <Select
                 labelId="sort-label"
@@ -98,7 +100,7 @@ const Home = () => {
                 <MenuItem value="desc">Descending</MenuItem>
                 <MenuItem value="asc">Ascending</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
             <AppBar
               className={classes.appBarSearch}
               position="static"
@@ -121,6 +123,17 @@ const Home = () => {
                 onAdd={handleAdd}
                onDelete={handleDelete}
               />
+              <InputLabel id="sort-label">Sort By Date</InputLabel>
+              <Select
+                labelId="sort-label"
+                id="sort"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                label="Sort By Date"
+              >
+                <MenuItem value="asc">Ascending</MenuItem>
+                <MenuItem value="desc">Descending</MenuItem>
+              </Select>
               <Button
                 onClick={searchPost}
                 color="primary"

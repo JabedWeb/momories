@@ -12,7 +12,7 @@ const Posts = ({ setCurrentId }) => {
   const dispatch = useDispatch();
 
   const user = JSON.parse(localStorage.getItem("profile"));
-  const userPosts = posts.filter((post) => post.email === user?.result?.email);
+  //const userPosts = posts.filter((post) => post.email === user?.result?.email);
 
   useEffect(() => {
     dispatch(getPosts());
@@ -20,7 +20,7 @@ const Posts = ({ setCurrentId }) => {
 
   if (!user && !isLoading) return "Please Sign In to create your own memories and like other's memories.";
 
-  if (!userPosts.length && !isLoading) return "No posts, create one now!";
+  if (!posts.length && !isLoading) return "No posts, create one now!";
 
   return isLoading ? (
     <CircularProgress />
@@ -31,7 +31,7 @@ const Posts = ({ setCurrentId }) => {
       alignItems="stretch"
       spacing={3}
     >
-      {userPosts.map((post) => (
+      {posts.map((post) => (
         <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
           <Post post={post} setCurrentId={setCurrentId} />
         </Grid>

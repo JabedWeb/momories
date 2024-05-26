@@ -40,16 +40,34 @@ export const getPosts = async (req, res) => {
 };
 
 export const getPostsBySearch = async (req, res) => {
-  //console.log(req.query);
-  const { searchQuery, tags } = req.query;
+  console.log(req.query);
+  const { searchQuery, tags,sort } = req.query;
   try {
-    
-    const title = new RegExp(searchQuery, "i");
-    const posts = await PostMessage.find({
-      $or: [{ title }, { tags: { $in: tags.split(",") } }],
-    });
-    console.log(posts);
-    res.json(posts);
+    if(searchQuery === 'none' && tags === 'none' && sort === 'asc'){
+      const posts = await PostMessage.find().sort({ createdAt: 1 });
+      res.json(posts);
+    }
+    else if(searchQuery === 'none' && tags === 'none' && sort === 'desc'){
+      const posts = await PostMessage.find().sort({ createdAt: -1 });
+      res.json(posts);
+    }
+    else if(sort === 'asc'){
+      const posts = await PostMessage.find({
+        $or: [{ title: { $regex: searchQuery, $options: "i" } }, { tags: { $in: tags.split(",") } },],
+      }).sort({ createdAt: 1 });
+      res.json(posts);
+    }else {
+      const posts = await PostMessage.find({
+        $or: [{ title: { $regex: searchQuery, $options: "i" } }, { tags: { $in: tags.split(",") } },],
+      }).sort({ createdAt: -1 });
+      res.json(posts);
+    }
+    // const title = new RegExp(searchQuery, "i");
+    // const posts = await PostMessage.find({
+    //   $or: [{ title }, { tags: { $in: tags.split(",") } },],
+    // });
+    // console.log(posts);
+    // res.json(posts);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -58,6 +76,8 @@ export const getPostsBySearch = async (req, res) => {
 export const getPostsByDate = async (req, res) => {
   
   const { sort } = req.query;
+
+  console.log(`Sorting posts by: ${sort}`);
 
   try {
     const sortOrder = sort === 'asc' ? 1 : -1;
