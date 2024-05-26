@@ -41,10 +41,9 @@ const Home = () => {
     const searchParams = {
       search: search.trim() || "none",
       tags: tags.length ? tags.join(",") : "",
-      sort,
     };
 
-    if (searchParams.search === "none" && !searchParams.tags) return;
+   // if (searchParams.search === "none" && !searchParams.tags) return;
 
     console.log(searchParams);
 
@@ -87,7 +86,7 @@ const Home = () => {
             <Posts setCurrentId={setCurrentId} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl variant="outlined" className={classes.formControl}>
+            <FormControl style={{display:"none"}} variant="outlined" className={classes.formControl}>
               <InputLabel id="sort-label">Sort By Date</InputLabel>
               <Select
                 labelId="sort-label"
@@ -120,7 +119,7 @@ const Home = () => {
                 label="Search Tags"
                 value={tags}
                 onAdd={handleAdd}
-                onDelete={handleDelete}
+               onDelete={handleDelete}
               />
               <Button
                 onClick={searchPost}
