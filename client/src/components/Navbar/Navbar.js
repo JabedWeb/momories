@@ -40,6 +40,20 @@ const Navbar = () => {
       <Link to="/" className={classes.brandContainer}>
         <img src={memoriesText} alt="icon" height="45px" />
       </Link>
+
+      {/* show my post  */}
+      {
+        user?.result && (
+          <Button
+            component={Link}
+            to="/myposts"
+            variant="contained"
+            color="primary"
+          >
+            My Posts
+          </Button>
+        )
+      }
       <Toolbar className={classes.toolbar}>
         {user?.result ? (
           <div className={classes.profile}>
@@ -55,12 +69,22 @@ const Navbar = () => {
             </Typography>
             <Button
               variant="contained"
+              color="primary"
+              className={classes.donateButton}
+              onClick={() => history.push('/donate_coffee')}
+            >
+              Donate
+            </Button>
+            
+            <Button
+              variant="contained"
               className={classes.logout}
               color="secondary"
               onClick={logout}
             >
               Logout
             </Button>
+            
           </div>
         ) : (
           <Button

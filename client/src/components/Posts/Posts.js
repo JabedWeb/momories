@@ -18,9 +18,9 @@ const Posts = ({ setCurrentId }) => {
     dispatch(getPosts());
   }, [dispatch]);
 
-  if (!user && !isLoading) return "Please Sign In to create your own memories and like other's memories.";
+  //if (!user && !isLoading) return "Please Sign In to create your own memories and like other's memories.";
 
-  if (!posts.length && !isLoading) return "No posts, create one now!";
+  //if (!posts.length && !isLoading) return "No posts, create one now!";
 
   return isLoading ? (
     <CircularProgress />

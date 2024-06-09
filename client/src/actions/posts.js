@@ -12,6 +12,8 @@ import {
   FETCH_SORTED_POSTS,
 } from "../constants/actionTypes";
 import * as api from "../api/index.js";
+import { toast } from 'react-toastify';
+
 
 export const getPost = (id) => async (dispatch) => {
   try {
@@ -63,7 +65,9 @@ export const createPost = (post, history) => async (dispatch) => {
     const { data } = await api.createPost(post);
     history.push("/");
     dispatch({ type: CREATE, payload: data });
+    toast.success('Post created successfully!');
   } catch (error) {
+    toast.success('Post created successfully!');
     console.log(error);
   }
 };
@@ -72,10 +76,12 @@ export const updatePost = (id, post) => async (dispatch) => {
   try {
     dispatch({ type: 'START_LOADING' });
     const { data } = await api.updatePost(id, post);
-    dispatch({ type: 'UPDATE', payload: data });
+    dispatch({ type: UPDATE, payload: data });
     dispatch(getPosts()); // Fetch posts after update
     dispatch({ type: 'END_LOADING' });
+    toast.success('Post updated successfully!');
   } catch (error) {
+    toast.error('Failed to update post!');
     console.log(error.message);
   }
 };
@@ -85,7 +91,7 @@ export const likePost = (id) => async (dispatch) => {
 
   try {
     const { data } = await api.likePost(id, user?.token);
-
+  
     dispatch({ type: LIKE, payload: data });
   } catch (error) {
     console.log(error);
@@ -96,6 +102,7 @@ export const commentPost = (comment, id) => async (dispatch) => {
   try {
     const { data } = await api.commentPost(comment, id);
     dispatch({ type: COMMENTS, payload: data });
+    toast.success('Comment added successfully!');
     return data.comments;
   } catch (error) {
     console.log(error);
@@ -107,7 +114,9 @@ export const deletePost = (id, history) => async (dispatch) => {
     await api.deletePost(id);
     history.push("/");
     dispatch({ type: DELETE, payload: id });
+    toast.success('Post deleted successfully!');
   } catch (error) {
+    toast.error('Failed to delete post!');
     console.log(error);
   }
 };

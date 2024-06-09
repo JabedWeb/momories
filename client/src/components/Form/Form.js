@@ -53,6 +53,10 @@ const Form = ({ currentId, setCurrentId }) => {
     }
   };
 
+  const handleFileChange = ({ base64 }) => {
+    setPostData({ ...postData, selectedFile: base64 });
+  };
+
   if (!user?.result?.name) {
     return (
       <Paper className={classes.paper}>
@@ -120,9 +124,7 @@ const Form = ({ currentId, setCurrentId }) => {
           <FileBase
             type="file"
             multiple={false}
-            onDone={({ base64 }) =>
-              setPostData({ ...postData, selectedFile: base64 })
-            }
+            onDone={handleFileChange}
           />
         </div>
         <Button

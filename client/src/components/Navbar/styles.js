@@ -55,6 +55,13 @@ export default makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  donateButton: {
+    backgroundColor: '#3f51b5',
+    color: '#fff',
+    '&:hover': {
+      backgroundColor: '#303f9f',
+    },
+  },
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],

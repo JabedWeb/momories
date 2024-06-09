@@ -5,6 +5,7 @@ import {
   CircularProgress,
   Divider,
   Grid,
+  Button,
 } from "@material-ui/core/";
 import moment from "moment";
 import { Link, useParams, useHistory } from "react-router-dom";
@@ -46,6 +47,10 @@ const PostDetails = () => {
 
   const openPost = (_id) => history.push(`/posts/${_id}`);
 
+  const handleTagClick = (tag) => {
+    history.push(`/posts/search?tags=${tag}`);
+  };
+
   // Filter posts based on ID
  // const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
   // Filter posts based on tags
@@ -58,22 +63,17 @@ const PostDetails = () => {
           <Typography variant="h3" component="h2">
             {post.title}
           </Typography>
-          <Typography
-            gutterBottom
-            variant="h6"
-            color="textSecondary"
-            component="h2"
-          >
-            {post.tags.map((tag, index) => (
-              <Link
-                key={index}
-                to={`/tags/${tag}`}
-                style={{ textDecoration: "none", color: "#3f51b5" }}
-              >
-                {` #${tag} `}
-              </Link>
-            ))}
-          </Typography>
+          <div className={classes.tags}>
+                {post.tags.map((tag, index) => (
+                  <Button
+                    key={index}
+                    onClick={() => handleTagClick(tag)}
+                    className={classes.tagButton}
+                  >
+                    {`#${tag}`}
+                  </Button>
+                ))}
+              </div>
           <Typography gutterBottom variant="body1" component="p">
             {post.message}
           </Typography>

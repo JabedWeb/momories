@@ -1,37 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, CircularProgress } from "@material-ui/core";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 import Post from "./Post/Post";
 import useStyles from "./styles";
+import { getPosts } from "../../actions/posts"; 
 
 const MyPosts = ({ setCurrentId }) => {
-  const { posts, isLoading } = useSelector((state) => state.posts);
   const classes = useStyles();
-
+  const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
-  const userPosts = posts.filter((post) => post.name === user?.result?.name);
+  const {posts, isLoading } = useSelector((state) => state.posts);
 
-  console.log(posts);
-  console.log(userPosts);
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
 
-  if (!userPosts.length && !isLoading) return <h3>No posts yet,create new one now</h3>;
+  if (!user) return "Please Sign In to see your own memories.";
+
+  const userPosts = posts.filter((post) => post.email === user?.result?.email);
+
+  if (!userPosts.length && !isLoading) return <h3>No posts yet, create a new one now</h3>;
 
   return isLoading ? (
     <CircularProgress />
   ) : (
-    <Grid
-      className={classes.container}
-      container
-      alignItems="stretch"
-      spacing={3}
-    >
-      {userPosts.map((post) => (
-        <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-          <Post post={post} setCurrentId={setCurrentId} />
-        </Grid>
-      ))}
-    </Grid>
+    <div>
+      <h1>My Posts</h1>
+      <Grid
+        className={classes.container}
+        container
+        alignItems="stretch"
+        spacing={3}
+      >
+        {userPosts.map((post) => (
+          <Grid key={post._id} item xs={12} sm={12} md={3} lg={2}>
+            <Post post={post} setCurrentId={setCurrentId} />
+          </Grid>
+        ))}
+      </Grid>
+    </div>
   );
 };
 
