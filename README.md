@@ -48,11 +48,13 @@ The "Memories" project is a web application that allows users to share and inter
     nodemon index.js
     ```
 
-5. Install the dependencies for the client:
-    ```sh
-    cd ../client
-    npm install --legacy-peer-deps
-    ```
+5. **Installing Client Dependencies:**
+   Navigate to the client directory and install the necessary dependencies. It's important to use the `--legacy-peer-deps` flag with every package installation to avoid conflicts with peer dependencies. Here's how you can do it:
+
+   ```sh
+   cd client
+   npm install --legacy-peer-deps
+   ```
 
 6. Start the client:
     ```sh
