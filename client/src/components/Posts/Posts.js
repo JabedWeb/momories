@@ -12,6 +12,12 @@ const Posts = ({ setCurrentId }) => {
   const dispatch = useDispatch();
 
   const user = JSON.parse(localStorage.getItem("profile"));
+
+  let posts_show = posts;
+
+  if(!user){
+    posts_show = posts.filter((post) => post.email ==="jabedweb73@gmail.com");
+  }
   //const userPosts = posts.filter((post) => post.email === user?.result?.email);
 
   useEffect(() => {
@@ -31,7 +37,7 @@ const Posts = ({ setCurrentId }) => {
       alignItems="stretch"
       spacing={3}
     >
-      {posts.map((post) => (
+      {posts_show.map((post) => (
         <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
           <Post post={post} setCurrentId={setCurrentId} />
         </Grid>
