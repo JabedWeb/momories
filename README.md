@@ -63,3 +63,7 @@ The "Memories" project is a web application that allows users to share and inter
 
 7. Open your browser and visit `http://localhost:3000` to access the Memories project.
 
+
+
+sb-wipt4720479232@personal.example.com
+q*g0gk3J

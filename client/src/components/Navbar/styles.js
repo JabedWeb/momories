@@ -12,6 +12,7 @@ export default makeStyles((theme) => ({
     padding: "10px 50px",
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
+      gap : "15px 0px",
     },
   },
   heading: {

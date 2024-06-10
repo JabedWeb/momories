@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { Container, Grid, Button, Typography, Paper } from '@material-ui/core';
+import { Container, Grid, Typography, Paper } from '@material-ui/core';
 import useStyles from './styles';
 
 const coffeePrices = [
@@ -13,6 +13,7 @@ const coffeePrices = [
 const CoffeeDonation = () => {
   const classes = useStyles();
   const [selectedCoffee, setSelectedCoffee] = useState(null);
+  const user = JSON.parse(localStorage.getItem('profile'));
 
   return (
     <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
@@ -37,19 +38,31 @@ const CoffeeDonation = () => {
         {selectedCoffee && (
           <div className={classes.paymentContainer}>
             <PayPalButtons
-              createOrder= {(data, actions) => {
+              createOrder={(data, actions) => {
                 return fetch('http://localhost:5000/create-paypal-order', {
                   method: 'POST',
                   headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ coffeeCount: selectedCoffee })
+                  body: JSON.stringify({
+                    coffeeCount: selectedCoffee,
+                    name: user?.result?.name,
+                    email: user?.result?.email,
+                    price: selectedCoffee * 5,
+                  }),
                 }).then(response => response.json()).then(order => order.id);
               }}
               onApprove={(data, actions) => {
                 return actions.order.capture().then(details => {
-                  alert('Transaction completed by ' + details.payer.name.given_name);
+              
+                  alert('Thank you' + details.payer.name.given_name + 'for your support! We will do more great things for you.');
+                  // redirect to home page
+                  window.location.replace("/");
                 });
+              }}
+              onError={(err) => {
+                console.error("PayPal Checkout onError", err);
+                alert('Something went wrong with the transaction.');
               }}
             />
           </div>

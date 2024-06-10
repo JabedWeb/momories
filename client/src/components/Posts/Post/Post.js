@@ -118,6 +118,10 @@ const Post = ({ post, setCurrentId }) => {
         <Typography variant="body2" color="textSecondary" component="p">
           {post.message}
         </Typography>
+        <Typography variant="body1">
+         {/* show date */}
+          {moment(post.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
+        </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
         <Button

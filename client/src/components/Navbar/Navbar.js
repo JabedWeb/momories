@@ -40,6 +40,11 @@ const Navbar = () => {
       <Link to="/" className={classes.brandContainer}>
         <img src={memoriesText} alt="icon" height="45px" />
       </Link>
+      {user?.result?.email === 'jabedweb73@gmail.com' && (
+              <Button component={Link} to="/admin/coffee-purchases" variant="contained" color="primary">
+                Admin Panel
+              </Button>
+            )}
 
       {/* show my post  */}
       {
@@ -56,6 +61,7 @@ const Navbar = () => {
       }
       <Toolbar className={classes.toolbar}>
         {user?.result ? (
+          
           <div className={classes.profile}>
             <Avatar
               className={classes.purple}
@@ -67,6 +73,7 @@ const Navbar = () => {
             <Typography className={classes.userName} variant="h6">
               {user?.result.name}
             </Typography>
+          
             <Button
               variant="contained"
               color="primary"
