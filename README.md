@@ -5,7 +5,7 @@ The "Memories" project is a web application that allows users to share and inter
 
 ## Features
 - User Authentication: Sign up and log in using email/password or Google account.
-- Create Memories: Add new memories with titles, descriptions, tags, date/time, and images.
+- Create Memories: Add new memories wi th titles, descriptions, tags, date/time, and images.
 - Interact with Memories: Like and comment on posts, and view memories from other users.
 - Search and Filter: Search memories by title and tags, and sort results by date.
 - Donations: Support the project by buying the developer a coffee via PayPal.
@@ -62,8 +62,3 @@ The "Memories" project is a web application that allows users to share and inter
     ```
 
 7. Open your browser and visit `http://localhost:3000` to access the Memories project.
-
-
-
-sb-wipt4720479232@personal.example.com
-q*g0gk3J
